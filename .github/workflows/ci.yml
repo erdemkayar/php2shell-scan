@@ -1,0 +1,86 @@
+name: php2shell-scanner CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install openpyxl python-docx cryptography
+      - name: Unit tests
+        run: python -m unittest -v tests.test_p2s
+      - name: Integration tests (rate limit, TLS 1.0, scope, interrupt/resume)
+        run: python tests/integration_test.py
+
+  e2e-real-php:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install real PHP and sshd
+        run: sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq php-cli openssh-server
+      - run: sudo pip3 install --break-system-packages openpyxl python-docx
+      - name: End-to-end scan + SSH verification against real PHP
+        run: sudo python3 tests/e2e_real_php.py
+
+  oracle-lab:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: --oracle against real PHP builds (Docker)
+        run: python3 tests/oracle_lab.py --full
+      - name: --local / --ioc / closure against real Ubuntu hosts (Docker)
+        run: python3 tests/host_lab.py
+
+  windows-collector:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: IIS + CGI, PHP from Chocolatey, php-cgi as an IIS FastCGI application, planted webshell pattern
+        shell: pwsh
+        run: |
+          Install-WindowsFeature Web-Server, Web-CGI | Out-Null
+          choco install php -y --no-progress | Out-Null
+          $cgi = (Get-ChildItem C:\tools\php*\php-cgi.exe | Select-Object -First 1).FullName
+          $dir = Split-Path $cgi -Parent
+          if (-not (Test-Path "$dir\php.ini")) { Copy-Item "$dir\php.ini-production" "$dir\php.ini" }
+          Add-Content "$dir\php.ini" "session.upload_progress.enabled=0"
+          $appcmd = "$env:windir\System32\inetsrv\appcmd.exe"
+          & $appcmd set config /section:system.webServer/fastCgi "/+[fullPath='$cgi']"
+          & $appcmd set config /section:system.webServer/handlers "/+[name='PHP_via_FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='$cgi',resourceType='Either']"
+          Set-Content C:\inetpub\wwwroot\index.php "<?php echo 'ci';"
+          New-Item -ItemType Directory C:\inetpub\wwwroot\up -Force | Out-Null
+          Set-Content C:\inetpub\wwwroot\up\cache.php "<?php @eval(base64_decode(`$_POST['x'])); ?>"
+          "CGI=$cgi" | Out-File -Append $env:GITHUB_ENV
+          (Invoke-WebRequest http://localhost/index.php -UseBasicParsing).Content
+      - name: Collector (-Ioc) as Administrator, then scanner-side checks
+        shell: pwsh
+        run: |
+          python php2shell_scan.py --windows-collector p2s-collect.ps1
+          powershell -NoProfile -ExecutionPolicy Bypass -File p2s-collect.ps1 -Out host.json -Ioc -Since 2020-01-01
+          python tests/windows_check.py host.json $env:CGI C:\inetpub\wwwroot\up\cache.php
+
+  package:
+    needs: [test, e2e-real-php, oracle-lab]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sh build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: php2shell.pyz
+          path: php2shell.pyz

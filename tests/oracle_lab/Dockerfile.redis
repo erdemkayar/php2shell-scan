@@ -1,0 +1,8 @@
+# Official PHP image with the phpredis session handler (session.save_handler=redis): checks whether the
+# oracle's write warning depends on the files handler. Needs a redis service reachable as "redis:6379".
+ARG BASE=php:8.5.11-apache
+FROM ${BASE}
+RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $PHPIZE_DEPS >/dev/null \
+ && pecl install -o -f redis >/dev/null && docker-php-ext-enable redis \
+ && printf 'session.save_handler=redis\nsession.save_path="tcp://redis:6379"\n' > /usr/local/etc/php/conf.d/20-session-redis.ini \
+ && apt-get purge -y -qq $PHPIZE_DEPS >/dev/null && rm -rf /var/lib/apt/lists/* /tmp/pear

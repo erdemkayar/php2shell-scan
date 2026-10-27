@@ -1,0 +1,85 @@
+{
+  "id": "PHP2Shell",
+  "title": "PHP core use-after-free / stale request state - unauthenticated RCE",
+  "cves": [
+    "CVE-2026-109618",
+    "CVE-2026-109619"
+  ],
+  "published": "2026-10-21",
+  "fixed": {
+    "8.2": "8.2.35",
+    "8.3": "8.3.36",
+    "8.4": "8.4.27",
+    "8.5": "8.5.12"
+  },
+  "eol_below": "8.2",
+  "distro_frozen_versions": {
+    "_note": "Version strings distributions ship unchanged for the life of a release and patch by backport. A banner showing one of these is not evidence of vulnerability on its own.",
+    "8.3.6": "Ubuntu 24.04",
+    "8.1.2": "Ubuntu 22.04",
+    "7.4.3": "Ubuntu 20.04",
+    "7.2.24": "RHEL/Alma/Rocky 8 (php:7.2 default stream)",
+    "8.0.30": {
+      "distro": "RHEL/Alma/Rocky 9 (php default stream)",
+      "requires_hint": true,
+      "_why": "8.0.30 is also the final upstream 8.0 release: without a distro hint it is treated as vanilla EOL"
+    }
+  },
+  "evidence": [
+    "Ubuntu 24.04: php8.3 8.3.6-0ubuntu0.24.04.13 (noble-security) changelog lists CVE-2026-109618 and CVE-2026-109619 while PHP_VERSION stays 8.3.6 (observed 2026-10-22)."
+  ],
+  "sources": [
+    [
+      "Rapid7 - CVE-2026-109618 and CVE-2026-109619",
+      "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+    ],
+    [
+      "Sansec - PHP2Shell",
+      "https://sansec.io/research/php2shell"
+    ],
+    [
+      "Datadog Security Labs - PHP2Shell",
+      "https://securitylabs.datadoghq.com/articles/php2shell-critical-vulnerabilities-in-php/"
+    ],
+    [
+      "NVD - CVE-2026-109618",
+      "https://nvd.nist.gov/vuln/detail/CVE-2026-109618"
+    ],
+    [
+      "NVD - CVE-2026-109619",
+      "https://nvd.nist.gov/vuln/detail/CVE-2026-109619"
+    ]
+  ],
+  "distro_branches": {
+    "_note": "PHP branches each distribution family ships in its own packages. A Server header naming the distribution only hints at a backport when the disclosed branch is one it ships; otherwise the PHP was built from upstream (e.g. the official php Docker images report Apache '(Debian)' with PHP 8.3/8.5). Families not listed (RHEL and clones ship many branches through module streams, SUSE, Fedora) always count as a hint.",
+    "debian": [
+      "7.3",
+      "7.4",
+      "8.2",
+      "8.4"
+    ],
+    "ubuntu": [
+      "7.2",
+      "7.4",
+      "8.1",
+      "8.3",
+      "8.4",
+      "8.5"
+    ]
+  },
+  "oracle": "session-write",
+  "_oracle_note": "--oracle is only valid for this advisory: it reads the session-write warning that THIS fix removed. A new advisory must not set 'oracle' unless its fix has a validated behavioural difference.",
+  "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+  "cvss3_score": 9.8,
+  "cvss3_by_cve": {
+    "_source": "NVD primary CVSS 3.1 (nvd@nist.gov, status Analyzed), read from services.nvd.nist.gov on 2026-10-23. cvss3_vector/cvss3_score above = the higher of the two, used for the combined finding.",
+    "CVE-2026-109618": {
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "score": 9.8
+    },
+    "CVE-2026-109619": {
+      "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "score": 8.1
+    }
+  }
+}

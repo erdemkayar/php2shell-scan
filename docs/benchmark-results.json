@@ -1,0 +1,1406 @@
+{
+ "targets": [
+  {
+   "name": "up-8.5.11",
+   "image": "php:8.5.11-apache",
+   "truth": "V",
+   "ini": "",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "upstream pre-fix, banner + warnings shown (container default)"
+  },
+  {
+   "name": "up-8.5.12",
+   "image": "php:8.5.12-apache",
+   "truth": "P",
+   "ini": "",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "upstream fixed, banner + warnings shown"
+  },
+  {
+   "name": "up-8.5.11-quiet",
+   "image": "php:8.5.11-apache",
+   "truth": "V",
+   "ini": "display_errors=0\n",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "pre-fix, banner shown, warnings hidden"
+  },
+  {
+   "name": "up-8.5.11-hidden",
+   "image": "php:8.5.11-apache",
+   "truth": "V",
+   "ini": "display_errors=0\nexpose_php=0\n",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "pre-fix, nothing disclosed"
+  },
+  {
+   "name": "ubuntu-old-prod",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0maysync1",
+   "truth": "V",
+   "ini": "",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu 24.04 pre-fix package, distro production php.ini"
+  },
+  {
+   "name": "ubuntu-new-prod",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0ubuntu0.24.04.13",
+   "truth": "P",
+   "ini": "",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu 24.04 backport, distro production php.ini"
+  },
+  {
+   "name": "ubuntu-old-banner",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0maysync1",
+   "truth": "V",
+   "ini": "expose_php=1\n",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu pre-fix, banner PHP/8.3.6"
+  },
+  {
+   "name": "ubuntu-new-banner",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0ubuntu0.24.04.13",
+   "truth": "P",
+   "ini": "expose_php=1\n",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu backport, SAME banner PHP/8.3.6"
+  },
+  {
+   "name": "ubuntu-old-show",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0maysync1",
+   "truth": "V",
+   "ini": "expose_php=1\ndisplay_errors=1\ndisplay_startup_errors=1\n",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu pre-fix, banner + warnings shown"
+  },
+  {
+   "name": "ubuntu-new-show",
+   "image": "p2s-lab/ubuntu-php:8.3.6-0ubuntu0.24.04.13",
+   "truth": "P",
+   "ini": "expose_php=1\ndisplay_errors=1\ndisplay_startup_errors=1\n",
+   "ini_path": "/etc/php/8.3/apache2/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "Ubuntu backport, banner + warnings shown"
+  },
+  {
+   "name": "eol-7.4-show",
+   "image": "php:7.4-apache",
+   "truth": "V",
+   "ini": "display_errors=1\ndisplay_startup_errors=1\n",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 80,
+   "models": "EOL 7.4, warnings shown"
+  },
+  {
+   "name": "static-front",
+   "image": "php:8.5.11-apache",
+   "truth": "V",
+   "ini": "",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "linked",
+   "port": 80,
+   "models": "pre-fix PHP behind a link on a static front page"
+  },
+  {
+   "name": "no-php",
+   "image": "php:8.5.11-apache",
+   "truth": "N",
+   "ini": "",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "static",
+   "port": 80,
+   "models": "static site, no PHP executed"
+  },
+  {
+   "name": "fpm-9000",
+   "image": "php:8.5.11-fpm",
+   "truth": "V",
+   "ini": "",
+   "ini_path": "/usr/local/etc/php/conf.d/99-bench.ini",
+   "doc": "plain",
+   "port": 9000,
+   "models": "PHP-FPM socket exposed on 9000, pre-fix"
+  }
+ ],
+ "results": [
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.6
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "PATCHED_BY_BANNER",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --no-deep (passive)",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "FPM_EXPOSED",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "PATCHED_BY_BANNER",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.6
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner (default)",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "FPM_EXPOSED",
+   "seconds": 0.6
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "ORACLE_VULNERABLE",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "ORACLE_PATCHED",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.2
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "PHP_VERSION_HIDDEN",
+   "seconds": 0.2
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.3
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "VERIFY_DISTRO_BACKPORT",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "ORACLE_VULNERABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "ORACLE_PATCHED",
+   "seconds": 0.7
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "ORACLE_VULNERABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "ORACLE_VULNERABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "NO_PHP_INDICATOR",
+   "seconds": 0.4
+  },
+  {
+   "tool": "php2shell-scanner --oracle",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "FPM_EXPOSED",
+   "seconds": 0.6
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE,UNREACHABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "PATCHED,UNREACHABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE,UNREACHABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_SIGNAL,UNREACHABLE",
+   "seconds": 0.7
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_SIGNAL,UNREACHABLE",
+   "seconds": 0.6
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "NO_PHP_SIGNAL,UNREACHABLE",
+   "seconds": 0.7
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE,UNREACHABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "LIKELY_VULNERABLE,UNREACHABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE,UNREACHABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "LIKELY_VULNERABLE,UNREACHABLE",
+   "seconds": 0.5
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "LIKELY_VULNERABLE,UNREACHABLE",
+   "seconds": 0.6
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE,UNREACHABLE",
+   "seconds": 0.7
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "NO_PHP_SIGNAL,UNREACHABLE",
+   "seconds": 0.6
+  },
+  {
+   "tool": "zarguell/php2shell-scanner",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "UNREACHABLE,UNREACHABLE",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.4
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "[=] Verdict: LIKELY PATCHED",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.3
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "[=] Verdict: UNDETERMINED (PHP present, version hidden)",
+   "seconds": 0.3
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "[=] Verdict: UNDETERMINED (PHP present, version hidden)",
+   "seconds": 0.3
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "[=] Verdict: UNDETERMINED (PHP present, version hidden)",
+   "seconds": 0.3
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: LIKELY VULNERABLE",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "[=] Verdict: UNDETERMINED (PHP present, version hidden)",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "[=] Verdict: UNDETERMINED (PHP present, version hidden)",
+   "seconds": 0.2
+  },
+  {
+   "tool": "CyberRoute/php2shell-scanner",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "canner \u2014 CVE-2026-109618 (OOM corruption) / CVE-2026-109619 (stale global state)\n[*] Target: http://10.250.250.23:9000\n\n[1] Fingerprint       FAIL \u2014 unreachable ([Errno 104] Connection reset by peer)\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "[=] Verdict: LIKELY PATCHED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "-related signals were observed.\n    Mitigate: upgrade to 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12+; partial: session.upload_progress.enabled=Off (restart workers).\n    This tool does not exploit either CVE.\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "-related signals were observed.\n    Mitigate: upgrade to 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12+; partial: session.upload_progress.enabled=Off (restart workers).\n    This tool does not exploit either CVE.\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "-related signals were observed.\n    Mitigate: upgrade to 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12+; partial: session.upload_progress.enabled=Off (restart workers).\n    This tool does not exploit either CVE.\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "[=] Verdict: AFFECTED VERSION + SURFACE PRESENT",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "-related signals were observed.\n    Mitigate: upgrade to 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12+; partial: session.upload_progress.enabled=Off (restart workers).\n    This tool does not exploit either CVE.\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "-related signals were observed.\n    Mitigate: upgrade to 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12+; partial: session.upload_progress.enabled=Off (restart workers).\n    This tool does not exploit either CVE.\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "mohamedation/php2shell-scanner",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": " CVE-2026-109619\n[*] Target: http://10.250.250.23:9000\n    Non-destructive: no OOM, no PHP payload, no code execution.\n\n[1] Fingerprint       FAIL \u2014 unreachable ([Errno 104] Connection reset by peer)\n",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "vulnerable=False",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no finding",
+   "seconds": 0.2
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no finding",
+   "seconds": 0.2
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "no finding",
+   "seconds": 0.2
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "vulnerable=True",
+   "seconds": 0.1
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no finding",
+   "seconds": 0.2
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "no finding",
+   "seconds": 0.2
+  },
+  {
+   "tool": "bladehstream/php2shell_detect",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "vulnerable=None",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "PATCHED",
+   "score": "OK",
+   "detail": "PATCHED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_DETECTED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "NO_PHP_DETECTED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "NO_PHP_DETECTED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "VULNERABLE",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "VULNERABLE_EOL",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "UNKNOWN",
+   "score": "VERIFY",
+   "detail": "UNKNOWN",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "NO_PHP_DETECTED",
+   "seconds": 0.1
+  },
+  {
+   "tool": "JoasASantos/php2shell-scanner",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "",
+   "seconds": 0.1
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618,CVE-2026-109619",
+   "seconds": 0.8
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "CVE-2026-109618",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109619",
+   "seconds": 0.5
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "no match",
+   "seconds": 0.5
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109619",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "CVE-2026-109619",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618,CVE-2026-109619",
+   "seconds": 0.5
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "CVE-2026-109618,CVE-2026-109619",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109619",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 0.4
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "no match",
+   "seconds": 0.5
+  },
+  {
+   "tool": "nuclei: Ademking CVE-2026-109618/9",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 1.4
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "up-8.5.11",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618",
+   "seconds": 0.6
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "up-8.5.12",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "no match",
+   "seconds": 0.5
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "up-8.5.11-quiet",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618",
+   "seconds": 8.7
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "up-8.5.11-hidden",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 3.8
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-old-prod",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 5.2
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-new-prod",
+   "truth": "P",
+   "verdict": "NONE",
+   "score": "OK_NO_PHP",
+   "detail": "no match",
+   "seconds": 3.3
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-old-banner",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618",
+   "seconds": 2.0
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-new-banner",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "CVE-2026-109618",
+   "seconds": 3.1
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-old-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618",
+   "seconds": 0.7
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "ubuntu-new-show",
+   "truth": "P",
+   "verdict": "VULN",
+   "score": "FALSE_ALARM",
+   "detail": "CVE-2026-109618",
+   "seconds": 2.1
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "eol-7.4-show",
+   "truth": "V",
+   "verdict": "VULN",
+   "score": "HIT",
+   "detail": "CVE-2026-109618",
+   "seconds": 1.2
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "static-front",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 2.3
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "no-php",
+   "truth": "N",
+   "verdict": "NONE",
+   "score": "OK",
+   "detail": "no match",
+   "seconds": 1.8
+  },
+  {
+   "tool": "nuclei: ProjectDiscovery CVE-2026-109618 (intrusive)",
+   "target": "fpm-9000",
+   "truth": "V",
+   "verdict": "NONE",
+   "score": "MISS",
+   "detail": "no match",
+   "seconds": 1.4
+  }
+ ]
+}

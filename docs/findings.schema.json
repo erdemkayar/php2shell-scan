@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/erdemkayar/php2shell-scan/main/docs/findings.schema.json",
+  "title": "php2shell.findings/1",
+  "description": "findings.json written by php2shell-scanner (--formats findings) and returned by the MCP tools. One finding per kind per asset that needs action. Backwards-compatible additions only within format version 1.",
+  "type": "object",
+  "required": ["format", "tool_version", "advisory", "cves", "summary", "findings"],
+  "properties": {
+    "format": {"const": "php2shell.findings/1"},
+    "tool_version": {"type": "string"},
+    "advisory": {"type": "string", "description": "advisory id that drove the verdicts (advisory.json 'id')"},
+    "cves": {"type": "array", "items": {"type": "string", "pattern": "^CVE-\\d{4}-\\d+$"}},
+    "generated": {"type": "string"},
+    "complete": {"type": ["boolean", "null"], "description": "false/null: the scan did not cover every target; do not report it as complete"},
+    "summary": {
+      "type": "object",
+      "required": ["assets", "actionable", "by_status"],
+      "properties": {
+        "assets": {"type": "integer"},
+        "actionable": {"type": "integer", "description": "assets needing action (actionable status or compromise suspected)"},
+        "verified": {"type": "integer"},
+        "by_status": {"type": "object", "additionalProperties": {"type": "integer"}},
+        "by_closure": {"type": "object", "additionalProperties": {"type": "integer"}}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "check_id", "host", "port", "severity", "status", "closure", "cves", "title", "description",
+                     "impact", "remediation", "evidence", "references"],
+        "properties": {
+          "id": {"type": "string", "description": "stable across runs for the same advisory, kind and host (dedup key)"},
+          "kind": {"enum": ["vuln", "verify", "fpm", "ioc"],
+                   "description": "vuln: vulnerable / likely vulnerable / EOL / restart pending; verify: PHP present, patch state unknown; fpm: FastCGI reachable; ioc: compromise indicators on the host"},
+          "check_id": {"type": "string", "description": "per advisory and kind; the Nessus pluginID in findings.nessus"},
+          "host": {"type": "string"},
+          "names": {"type": "array", "items": {"type": "string"}},
+          "port": {"type": "integer"},
+          "scheme": {"type": "string"},
+          "severity": {"enum": ["critical", "high", "medium"]},
+          "status": {"enum": ["FPM_EXPOSED", "VERIFIED_VULNERABLE", "ORACLE_VULNERABLE", "VERIFIED_RESTART_REQUIRED", "LIKELY_VULNERABLE",
+                              "EOL_NO_UPSTREAM_FIX", "VERIFY_DISTRO_BACKPORT", "PHP_VERSION_HIDDEN", "PATCHED_BY_BANNER", "ORACLE_PATCHED",
+                              "VERIFIED_PATCHED", "NO_WEB_RESPONSE", "NO_PHP_INDICATOR", "VERIFIED_NO_PHP"]},
+          "closure": {"enum": ["COMPROMISE_SUSPECTED", "OPEN", "OPEN_MITIGATED", "PENDING_RESTART", "CLOSED_REMOTE", "CLOSED_IOC_PENDING",
+                               "CLOSED_VERIFIED", "NO_PHP_EVIDENCE", "NOT_APPLICABLE", ""]},
+          "cves": {"type": "array", "items": {"type": "string"}},
+          "title": {"type": "string"},
+          "description": {"type": "string", "description": "abstract; concrete host data is only in evidence"},
+          "impact": {"type": "string"},
+          "remediation": {"type": "string"},
+          "evidence": {"type": "string", "description": "untrusted text from the target is included verbatim: escape before rendering"},
+          "references": {"type": "array", "items": {"type": "string"}},
+          "labels": {"type": "object", "additionalProperties": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

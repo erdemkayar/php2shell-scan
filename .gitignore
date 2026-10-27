@@ -1,0 +1,13 @@
+out/
+php2shell_out/
+__pycache__/
+.ruff_cache/
+*.pyc
+*.jsonl
+targets*.txt
+scope*.txt
+ssh_map*.txt
+.env
+.DS_Store
+*.pyz
+evidence-*.zip
